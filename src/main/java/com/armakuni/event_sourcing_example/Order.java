@@ -67,11 +67,11 @@ public class Order {
             throw new OrderHasNotBeenPlaced(id);
         }
 
-        var orderLines = lines.entrySet().stream()
+        var orderItemLines = lines.entrySet().stream()
                 .map((entry) -> new OrderLine(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
 
-        printer.print(orderLines);
+        printer.print(orderItemLines);
     }
 
     private void applyEvent(OrderEvent event) {
