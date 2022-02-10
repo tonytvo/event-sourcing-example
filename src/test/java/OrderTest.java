@@ -93,8 +93,8 @@ class OrderTest {
         order.print(orderPrinter);
 
         verify(orderPrinter).print(Arrays.asList(
-                new OrderLine(new ItemCode("ITEM_1"), Quantity.of(2)),
-                new OrderLine(new ItemCode("ITEM_2"), Quantity.of(1))
+                new IndividualOrderLine(new ItemCode("ITEM_1"), Quantity.of(2)),
+                new IndividualOrderLine(new ItemCode("ITEM_2"), Quantity.of(1))
         ));
     }
 
@@ -110,8 +110,8 @@ class OrderTest {
         )));
         order.print(orderPrinter);
         verify(orderPrinter).print(Arrays.asList(
-                new OrderLine(new ItemCode("ITEM_1"), Quantity.of(2)),
-                new OrderLine(new ItemCode("ITEM_2"), Quantity.of(1))
+                new IndividualOrderLine(new ItemCode("ITEM_1"), Quantity.of(2)),
+                new IndividualOrderLine(new ItemCode("ITEM_2"), Quantity.of(1))
         ));
     }
 

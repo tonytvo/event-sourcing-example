@@ -7,15 +7,13 @@ import com.armakuni.event_sourcing_example.events.OrderPlaced;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Order {
+    private final OrderLines orderLines = new OrderLines();
     private ArrayList<OrderEvent> newEvents = new ArrayList<>();
 
     private OrderID id;
-    private HashMap<ItemCode, Quantity> lines = new HashMap<>();
     private boolean placed = false;
 
     public static Order create(OrderID orderID) {
@@ -67,11 +65,7 @@ public class Order {
             throw new OrderHasNotBeenPlaced(id);
         }
 
-        var orderItemLines = lines.entrySet().stream()
-                .map((entry) -> new OrderLine(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
-
-        printer.print(orderItemLines);
+        printer.print(orderLines.getOrderItems());
     }
 
     private void applyEvent(OrderEvent event) {
@@ -93,11 +87,7 @@ public class Order {
             throw new OrderHasAlreadyBeenPlaced(id);
         }
 
-        var quantity = lines.containsKey(event.itemCode)
-                ? lines.get(event.itemCode).increment()
-                : Quantity.of(1);
-
-        lines.put(event.itemCode, quantity);
+        orderLines.incrementQuantity(event);
     }
 
     private void applyEvent(OrderPlaced event) {
@@ -105,10 +95,11 @@ public class Order {
             throw new OrderHasAlreadyBeenPlaced(id);
         }
 
-        if (lines.isEmpty()) {
+        if (orderLines.isEmpty()) {
             throw new OrderHasNoItems(id);
         }
 
         placed = true;
     }
+
 }
